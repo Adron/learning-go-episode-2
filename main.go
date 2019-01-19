@@ -1,40 +1,32 @@
 package main
 
-import (
-	"bufio"
-	"fmt"
-	"os"
+import "fmt"
+
+type Celsius float64
+type Fahrenheit float64
+
+const (
+	AbsoluteZeroC Celsius = -273.15
+	FreezingC Celsius = 0
+	BoilingC Celsius = 100
 )
 
-func main() {
-	counts := make(map[string]int)
-	files := os.Args[1:]
-	if len(files) == 0 {
-		countLines(os.Stdin, counts)
-	} else {
-		for _, arg := range files {
-			f, err := os.Open(arg)
-			if err != nil {
-				fmt.Printf("The Error Happened! %s", os.Stderr)
-				continue
-			}
-			countLines(f, counts)
-			errFile := f.Close()
-			if errFile != nil {
-				fmt.Println("Holy moley the file didn't close correctly!")
-			}
-		}
-	}
-	for line, n := range counts {
-		if n > 1 {
-			fmt.Printf("%d\t%s\n", n, line)
-		}
-	}
+func CelsiusToFahrenheit(c Celsius) Fahrenheit {
+	return Fahrenheit(c*9/5 + 32)
 }
 
-func countLines(f *os.File, counts map[string]int) {
-	input := bufio.NewScanner(f)
-	for input.Scan() {
-		counts[input.Text()]++
-	}
+func FahrenheitToCelsius(f Fahrenheit) Celsius {
+	return Celsius((f-32) * 5/9)
+}
+
+func main () {
+	fmt.Println("Temperatures are hard to figure off the top of one's mind!")
+
+	boilingF := CelsiusToFahrenheit(BoilingC)
+
+	fmt.Printf("%v\n", boilingF)
+	fmt.Printf("%s\n", boilingF)
+	fmt.Println(boilingF)
+	fmt.Printf("%g\n", boilingF)
+
 }
